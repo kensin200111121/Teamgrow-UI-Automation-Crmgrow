@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+  crmgrow-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - "test.env"
+    # volumes:
+    #   - ".:/app"
+    volumes:
+      - "./reports:/reports"
+  

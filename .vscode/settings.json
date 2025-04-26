@@ -1,0 +1,4 @@
+{
+    "editor.inlineSuggest.showToolbar": "onHover",
+    "terminal.integrated.defaultProfile.windows": "Command Prompt"
+}

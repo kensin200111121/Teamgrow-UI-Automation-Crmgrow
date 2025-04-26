@@ -1,0 +1,155 @@
+name: Testing CRMGrow on DEV Test cases
+on:
+  push:
+    branches: [development]
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform...'
+        required: true
+        default: 'crmgrow'
+        type: choice
+        options:
+          - crmgrow
+          - vortex
+
+      environment:
+        description: 'Environment...'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+
+      user:
+        description: 'User account...'
+        required: true
+        default: 'joejamesdev@hotmail.com'
+        type: choice
+        options:
+          - joejamesdev@hotmail.com
+          - johnjamesdev@hotmail.com
+          
+      case:
+        description: 'Case part like wdio0, wdio1...'
+        required: true
+        default: 'wdio0'
+        type: choice
+        options:
+          - wdio0
+          - wdio1
+          - wdio2
+          - wdio3
+          - wdio4
+          - wdio5
+          - wdio6
+          - wdio7
+          - wdio8
+          - wdio9
+          - wdio10
+          - wdio11
+          - wdio12
+          - e2e
+
+      uid:
+        description: 'Unique id for testing (optional)'
+        rquired: false
+        default: '1'
+        
+run-name: ${{ inputs.case }}-${{ inputs.user }}-${{ inputs.platform }}-${{ inputs.environment }}-${{ inputs.uid }}
+
+jobs:
+  prepare:
+    name: Prepare the test automation
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Calcualte the days
+      id: date
+      run: |
+        echo "today=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+        echo "yesterday=$(date --date=yesterday +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+    
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Docker ENV generation with params
+      uses: DamianReeves/write-file-action@master
+      with:
+        path: test.env
+        write-mode: overwrite
+        contents: |
+          TEST_ITEM=${{ inputs.case }}
+
+    # - name: WDIO test account setting
+
+    - name: ENV generation with params
+      uses: DamianReeves/write-file-action@master
+      with:
+        path: config/.env
+        write-mode: append
+        contents: |
+          
+          USER_EMAIL=${{ inputs.user }}
+          PLATFORM=${{ inputs.platform }}
+          ENV=${{ inputs.environment }}
+
+    - name: Run Docker
+      run: |
+        docker compose up
+
+    - name: Report Check
+      run: cd reports && ls -la
+
+    - name: install awscli
+      run: |
+        export DEBIAN_FRONTEND=noninteractive
+        export TZ=America/Denver
+        sudo apt-get update
+        sudo apt-get install awscli npm nodejs -y
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-1
+
+    - name: upload-to-s3
+      run: |
+        aws s3 rm s3://crmgrow-test-report/ --exclude ${{ steps.date.outputs.today }}/* --exclude ${{ steps.date.outputs.yesterday }}/* --recursive
+        aws s3 cp reports s3://crmgrow-test-report/${{ steps.date.outputs.today }}/${{github.run_id}}-${{github.run_attempt}}-${{ inputs.case }}-${{ inputs.user }}-${{ inputs.platform }}-${{ inputs.environment }}-${{ inputs.uid }} --recursive --acl public-read
+
+
+  # result-push-s3:
+  #   name: Push the report to aws
+  #   needs: prepare
+  #   runs-on: self-hosted
+  #   environment: production
+
+  #   steps:
+  #     - name: Current Resource Check
+  #       run: ls -la
+
+  #     - name: Report Check
+  #       run: cd reports && ls -la
+
+  #     - name: install awscli
+  #       run: |
+  #         export DEBIAN_FRONTEND=noninteractive
+  #         export TZ=America/Denver
+  #         apt update && apt install awscli npm nodejs -y
+
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-west-1
+
+  #     - name: upload-to-s3
+  #       run: |
+  #         aws s3 rm s3://crmgrow-test-report/ --recursive
+  #         aws s3 cp reports s3://crmgrow-test-report/ --recursive --acl public-read

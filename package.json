@@ -1,0 +1,50 @@
+{
+  "dependencies": {
+    "@delta-reporter/wdio-delta-reporter-service": "^1.1.10",
+    "@wdio/cli": "^8.11.2",
+    "@wdio/dot-reporter": "^8.15.0",
+    "@wdio/globals": "^8.11.2",
+    "chrome-modheader": "^2.0.7",
+    "chromedriver": "^129.0.0",
+    "devtools": "^8.14.0",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1",
+    "mochawesome": "^7.1.3",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
+    "wdio-allure-reporter": "^0.8.3",
+    "wdio-chromedriver-service": "^8.1.1",
+    "wdio-json-reporter": "^3.0.0",
+    "wdio-junit-reporter": "^0.4.4",
+    "wdio-mochawesome-reporter": "4.0.0",
+    "webdriverio": "^8.32.0"
+  },
+  "devDependencies": {
+    "@wdio/local-runner": "^8.11.2",
+    "@wdio/mocha-framework": "^8.11.0",
+    "@wdio/spec-reporter": "^8.11.2",
+    "mochawesome-report-generator": "3.1.5",
+    "wdio-cucumberjs-json-reporter": "^5.1.7",
+    "wdio-html-nice-reporter": "^8.1.3-beta",
+    "wdio-light-reporter": "^0.2.7"
+  },
+  "scripts": {
+    "postinstall": "patch-package",
+    "generateReporter": "marge ./report/mochawesome/results.json --reportTitle 'CrmgrowTestReport' && cp -r mochawesome-report/* /reports",
+    "wdio0": "(wdio run ./wdio.conf.js --suite loginout && npm run generateReporter) || npm run generateReporter",
+    "wdio1": "(wdio run ./wdio.conf.js --suite profileDashboard && npm run generateReporter) || npm run generateReporter",
+    "wdio2": "(wdio run ./wdio.conf.js --suite dashboardTask && npm run generateReporter) || npm run generateReporter",
+    "wdio3": "(wdio run ./wdio.conf.js --suite pipeline && npm run generateReporter) || npm run generateReporter",
+    "wdio4": "(wdio run ./wdio.conf.js --suite material && npm run generateReporter) || npm run generateReporter",
+    "wdio5": "(wdio run ./wdio.conf.js --suite leadHub && npm run generateReporter) || npm run generateReporter",
+    "wdio6": "(wdio run ./wdio.conf.js --suite contacts && npm run generateReporter) || npm run generateReporter",
+    "wdio7": "(wdio run ./wdio.conf.js --suite automation && npm run generateReporter) || npm run generateReporter",
+    "wdio8": "(wdio run ./wdio.conf.js --suite bulkEmail && npm run generateReporter) || npm run generateReporter",
+    "wdio9": "(wdio run ./wdio.conf.js --suite calendar && npm run generateReporter) || npm run generateReporter",
+    "wdio10": "(wdio run ./wdio.conf.js --suite community && npm run generateReporter) || npm run generateReporter",
+    "wdio11": "(wdio run ./wdio.conf.js --suite templates && npm run generateReporter) || npm run generateReporter",
+    "wdio12": "(wdio run ./wdio.conf.js --suite settings && npm run generateReporter) || npm run generateReporter",
+    "wdio13": "(wdio run ./wdio.conf.js --suite contacts_wang && npm run generateReporter) || npm run generateReporter",
+    "e2e": "(wdio run ./wdio.conf.js --suite e2e && npm run generateReporter) || npm run generateReporter"
+  }
+}

@@ -1,0 +1,27 @@
+diff --git a/node_modules/wdio-mochawesome-reporter/src/index.js b/node_modules/wdio-mochawesome-reporter/src/index.js
+index c3fb6e1..dcaf1dc 100644
+--- a/node_modules/wdio-mochawesome-reporter/src/index.js
++++ b/node_modules/wdio-mochawesome-reporter/src/index.js
+@@ -74,12 +74,22 @@ class WdioMochawesomeReporter extends WDIOReporter {
+     // addContext functionality
+     registerListeners () {
+         process.on('wdio-mochawesome-reporter:addContext', this.addSomeContext.bind(this))
++        process.on('wdio-mochawesome-reporter:popContext', this.popContext.bind(this))
++    }
++
++    popContext() {
++        this.currTest.context.pop();
+     }
+ 
+     addSomeContext (object) {
++        // console.log(this.currTest)
+         this.currTest.context.push(object)
+     }
+ 
++    static removeContext (context) {
++        process.emit('wdio-mochawesome-reporter:popContext', context)
++    }
++
+     static addContext (context) {
+         process.emit('wdio-mochawesome-reporter:addContext', context)
+     }
