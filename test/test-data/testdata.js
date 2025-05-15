@@ -14,8 +14,8 @@ exports.isVortex = process.env.PLATFORM === "vortex"
 
 exports.testPrepare = {
     contact: {
-        name: '0Jackie',
-        phone: '9842010551',
+        name: 'Jackie',
+        phone: '9842010550',
         email: 'jackie.actor@gmail.com',
         company: 'crmGrow'
     },
@@ -44,12 +44,4 @@ exports.testPrepare = {
     template: {
         name: 'Demo_Template'
     }
-}
-
-exports.contact = {
-    full_name: process.env.TEST_CONTACT_FULLNAME,
-    first_name: process.env.TEST_CONTACT_FIRSTNAME,
-    last_name: process.env.TEST_CONTACT_LASTNAME,
-    email: process.env.TEST_CONTACT_EMAIL,
-    phone: process.env.TEST_CONTACT_PHONE
 }

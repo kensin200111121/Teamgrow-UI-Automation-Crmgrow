@@ -44,7 +44,8 @@
     "wdio10": "(wdio run ./wdio.conf.js --suite community && npm run generateReporter) || npm run generateReporter",
     "wdio11": "(wdio run ./wdio.conf.js --suite templates && npm run generateReporter) || npm run generateReporter",
     "wdio12": "(wdio run ./wdio.conf.js --suite settings && npm run generateReporter) || npm run generateReporter",
-    "wdio13": "(wdio run ./wdio.conf.js --suite contacts_wang && npm run generateReporter) || npm run generateReporter",
+    "wdio13": "(wdio run ./wdio.conf.js --suite contact_list && npm run generateReporter) || npm run generateReporter",
+    "wdio14": "(wdio run ./wdio.conf.js --suite contact_detail && npm run generateReporter) || npm run generateReporter",
     "e2e": "(wdio run ./wdio.conf.js --suite e2e && npm run generateReporter) || npm run generateReporter"
   }
 }

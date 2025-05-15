@@ -3,7 +3,6 @@ require('dotenv').config({ path: './config/.env' });
 const isVortex = process.env.PLATFORM === "vortex";
 const isStage = process.env.ENV === 'dev'
 const DOMAIN = !isVortex ?  isStage ? "https://stg-app.crmgrow.com" : "https://dev-app.crmgrow.com" : "https://vortexstage.gst.dev";
-// const DOMAIN = "http://localhost:4200";
 
 exports.Link = {
     AUTOMATIONS_LINK : `${DOMAIN}/automations/own/root`,

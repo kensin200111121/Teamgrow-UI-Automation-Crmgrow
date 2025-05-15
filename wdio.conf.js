@@ -10,7 +10,6 @@ const suiteName = {
     "calendar.js": "Calendar",
     "community.js": "Community",
     "contacts.js": "Contacts",
-    "contacts-wang.js": "Contacts",
     "profileDashboard.js": "Profile & Dashboard",
     "leadHub.js": "Leadhub",
     "settings.js": "Settings",
@@ -102,13 +101,6 @@ exports.config = {
                 './test/specs/logout.js'
             ]
         ],
-        contacts_wang: [
-            [
-                './test/specs/login.js',
-                './test/specs/contacts-wang.js',
-                './test/specs/logout.js'
-            ]
-        ],
         automation: [
             [
                 './test/specs/login.js',
@@ -154,6 +146,21 @@ exports.config = {
                 './test/specs/login.js',
                 './test/specs/setup/initData.js',
                 './test/specs/settings.js',
+                './test/specs/logout.js'
+            ]
+        ],
+        contact_list: [
+            [
+                './test/specs/login.js',
+                './test/specs/contact_preference.js',
+                './test/specs/contact_list.js',
+                './test/specs/logout.js'
+            ]
+        ],
+        contact_detail: [
+            [
+                './test/specs/login.js',
+                './test/specs/contact_detail.js',
                 './test/specs/logout.js'
             ]
         ],

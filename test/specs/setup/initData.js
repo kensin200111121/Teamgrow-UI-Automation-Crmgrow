@@ -25,20 +25,13 @@ describe('Global Data Setup', () => {
                 await delay(5000)
                 await $('input[data-name="contact-create-firstname"]').setValue(globalSetupData.contact.name)
                 await $('input[data-name="contact-create-email"]').setValue(globalSetupData.contact.email)
-                await $('app-contact-create-edit app-phone-input input[data-name="add-user-phone"]').setValue(globalSetupData.contact.phone)
-                if (await $('app-contact-create-edit #company_cc').isExisting() == false) {
-                    const companySpan = await browser.execute(() => {
-                        const spans = document.querySelectorAll('app-contact-create-edit span');
-                        return Array.from(spans).find(span => span.textContent.includes('Company'));
-                    });
-                    await $(companySpan).click()
-                }
-                await $('app-contact-create-edit #company_cc').waitForExist(3000);
-                await $('app-contact-create-edit input[name="company_cc"]').setValue(globalSetupData.contact.company)
+                await $('app-contact-create app-phone-input input[data-name="add-user-phone"]').setValue(globalSetupData.contact.phone)
+                await $('app-contact-create #company_cc').setValue(globalSetupData.contact.company)
+                await $('app-contact-create input[name="company"]').setValue(globalSetupData.contact.company)
                 await delay(2000)
                 await $('button[data-action="create-contact-add-btn"]').waitForClickable({ timeout: 3000 })
                 await $('button[data-action="create-contact-add-btn"]').click()
-                await $('app-contact-create-edit').waitForDisplayed({ reverse: true })
+                await $('app-contact-create').waitForDisplayed({ reverse: true })
                 await delay(5000)
                 await expect($('span=' + globalSetupData.contact.name)).toBeDisplayed()
             }
@@ -47,8 +40,8 @@ describe('Global Data Setup', () => {
     describe('Pipeline', () => {
         it('Add Test Pipeline', async () => {
             await goToPage('pipeline')
-            await $('div[data-name="pipeline-name-list"] span').waitForClickable({ timeout: 3000 })
-            await $('div[data-name="pipeline-name-list"] span').click()
+            await $('div[data-name="pipeline-name-list"] span.ml-2').waitForClickable({ timeout: 3000 })
+            await $('div[data-name="pipeline-name-list"] span.ml-2').click()
             await delay(1000)
             const testPipelineExist = await $(`div[data-name="pipeline-title-${globalSetupData.pipeline.name}"]`).isDisplayed()
             if(!testPipelineExist) {
@@ -97,7 +90,7 @@ describe('Global Data Setup', () => {
             }
             // Create development deal
             await goToPage('pipeline')
-            await $('div[data-name="pipeline-name-list"] span').click()
+            await $('div[data-name="pipeline-name-list"] span.ml-2').click()
             await delay(1000)
             await $(`div[data-name="pipeline-title-${globalSetupData.pipeline.name}"]`).click()
             await delay(3000)
@@ -106,21 +99,17 @@ describe('Global Data Setup', () => {
                 await $('button[data-action="create-new-deal"]').waitForClickable({ timeout: 5000 })
                 await $('button[data-action="create-new-deal"]').click()
                 await $('app-deal-create').waitForDisplayed({ timeout: 2000 })
-                await $('input[data-name="title"]').setValue(globalSetupData.pipeline.deal)
-                const stageSelect = await browser.execute(() => { return document.querySelector('app-deal-create select'); });
-                await $(stageSelect).click()
-                const stageSelectOption = await browser.execute(() => { return document.querySelectorAll('app-deal-create select option')[0]; });
-                await $(stageSelectOption).click()
-                await delay(2000)
+                await $('input[data-name="deal-title"]').setValue(globalSetupData.pipeline.deal)
+                await $('select[data-name="select-stage"]').click()
+                await $('option[data-name="select-stage-item-0"]').click()
                 await $('input[data-name="task-contact-to-assign"]').setValue('j')
                 await $('div=' + globalSetupData.contact.name).waitForClickable({ timeout: 15000 })
                 await $('div=' + globalSetupData.contact.name).click()
-                await $('app-select-contact-list .mat-select-wrapper').click()
-                await $('.mat-select-panel-wrap mat-option').click()
                 await $('button[data-action="deal-create-confirm"]').click()
                 await $('app-deal-create').waitForDisplayed({ reverse: true })
                 await delay(3000)
                 await expect($('div=' + globalSetupData.pipeline.deal)).toBeDisplayed()
+                await expect($('div=' + globalSetupData.contact.name)).toBeDisplayed()
             }
         })
     })
